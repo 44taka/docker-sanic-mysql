@@ -1,0 +1,5 @@
+sanic
+sqlalchemy
+tortoise-orm
+aiomysql
+cerberus

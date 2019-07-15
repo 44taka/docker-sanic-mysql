@@ -1,0 +1,5 @@
+CREATE DATABASE IF NOT EXISTS sanic CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE USER IF NOT EXISTS 'sanicuser'@'%' IDENTIFIED BY 'sanicpass';
+GRANT ALL PRIVILEGES ON sanic.* TO 'sanicuser'@'%';
+
+FLUSH PRIVILEGES;
