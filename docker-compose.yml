@@ -5,12 +5,22 @@ volumes:
     name: sanic.db.volume
 
 services:
+  nginx:
+    image: nginx:latest
+    container_name: sanic.nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+    depends_on:
+      - web
+
   web:
     build: "./web"
     container_name: sanic.web
     command: /bin/sh -c "python /code/project/main.py"
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     volumes:
       - "./web/project/app:/code/project/app"
     depends_on:
