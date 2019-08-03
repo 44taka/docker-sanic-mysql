@@ -18,13 +18,16 @@ services:
   web:
     build: "./web"
     container_name: sanic.web
-    command: /bin/sh -c "python /code/project/main.py"
+    command: /bin/sh -c "python /code/project/main.py && python /code/project/app/migrate.py"
+#    command: /bin/sh -c "cd project && gunicorn main:app --bind 0.0.0.0:8000 --worker-class sanic.worker.GunicornWorker  && python /code/project/migrate.py"
     expose:
       - "8000"
     volumes:
-      - "./web/project/app:/code/project/app"
+      - ./web/project/app:/code/project/app
+      - ./web/project/cli:/code/project/cli
     depends_on:
       - db
+#      - selenium-hub
 
   db:
     image: mysql:5.7
@@ -37,4 +40,23 @@ services:
     volumes:
       - sanic.db.volume:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d
-      - "./mysql:/etc/mysql/conf.d"
+      - ./mysql:/etc/mysql/conf.d
+
+  selenium-hub:
+    image: selenium/hub
+    container_name: sanic.selenium-hub
+    ports:
+      - "4444:4444"
+
+  chrome:
+    image: selenium/node-chrome-debug
+    container_name: sanic.chrome
+    ports:
+      - "5900:5900"
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444

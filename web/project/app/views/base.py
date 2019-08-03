@@ -1,6 +1,7 @@
 from sanic.views import HTTPMethodView
+from sanic.response import html, text
 from ..utils import error_codes
-
+from jinja2 import Environment, PackageLoader, select_autoescape
 
 class BaseView(HTTPMethodView):
     """
@@ -33,3 +34,21 @@ class BaseView(HTTPMethodView):
             "message": error_codes.codes[error_cd],
             "result": result
         }
+
+
+class BaseJinjaView(HTTPMethodView):
+    """
+    BaseJinjaViewクラス
+    """
+    def __init__(self):
+        self.env = Environment(
+            loader=PackageLoader("app", "templates"),
+            autoescape=select_autoescape(["html", "xml"])
+        )
+        self.template = self.env.get_template("template.html")
+
+
+    def render(self, *args, **kwargs):
+        vars = dict(*args, **kwargs)
+        return html(self.template.render(vars))
+

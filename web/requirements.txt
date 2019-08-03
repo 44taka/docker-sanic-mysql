@@ -1,5 +1,14 @@
 sanic
 sqlalchemy
+mysqlclient
 tortoise-orm
 aiomysql
 cerberus
+gunicorn
+requests
+beautifulsoup4
+fire
+selenium
+pytz
+jinja2
+jinja2-sanic

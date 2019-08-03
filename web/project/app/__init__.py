@@ -1,3 +1,5 @@
+import os
+
 from sanic import Sanic
 import sanic.exceptions as se
 
@@ -10,10 +12,16 @@ from .configs import local
 from .handlers.sanic_error_handler import not_found, server_error
 from .handlers.tortoise_error_handler import db_connection, configuration_error
 
+# staticディレクトリのフルパス取得
+STATIC_FOLDER = os.path.join(os.path.dirname(__file__), 'static')
+
 app = Sanic()
 
 # 環境別の設定ファイルを読み込み
 app.config.from_object(local)
+
+# 静的ファイル読み込み
+app.static("/static", STATIC_FOLDER)
 
 # エラーハンドリング設定
 app.error_handler.add(se.NotFound, not_found)

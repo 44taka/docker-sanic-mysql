@@ -26,3 +26,17 @@ class Token(Model):
 
     def __str__(self):
         return self.body
+
+
+class Aiseki_bar_aggregate(Model):
+    id = fields.IntField(pk=True)
+    bar_type = fields.CharField(max_length=255)
+    branch_name = fields.CharField(max_length=64)
+    mens = fields.IntField()
+    ladys = fields.IntField()
+    aggregated_at = fields.DatetimeField()
+    created_at = fields.DatetimeField(auto_now=True)
+    updated_at = fields.DatetimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.visitors
